@@ -73,10 +73,12 @@ namespace BarycentricCoordinates
                 && (0 < lambda2) && (lambda2 < 1)
                 && (0 < lambda3) && (lambda3 < 1);
 
+            int zeroCount = TestEquals(lambda1, 0) + TestEquals(lambda2, 0) + TestEquals(lambda3, 0);
+
             bool onEdge = (0 <= lambda1) && (lambda1 <= 1)
                 && (0 <= lambda2) && (lambda2 <= 1)
                 && (0 <= lambda3) && (lambda3 <= 1)
-                && (TestEquals(lambda1, 0) + TestEquals(lambda2, 0) + TestEquals(lambda3, 0) <= 2);
+                && (0 < zeroCount) && (zeroCount < 3);
 
             return inside || onEdge;
         }
