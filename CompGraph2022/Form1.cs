@@ -321,7 +321,7 @@ namespace CompGraph2022
                         (e.Y - _controlSize < point.Y) && (point.Y < e.Y + _controlSize);
         }
     }
-    class Shape
+    public class Shape
     {
         public List<Point> Points { set; get; }
         public Point Center { get; set; }
