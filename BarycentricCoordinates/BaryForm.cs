@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CompGraph2022;
 
@@ -81,14 +76,14 @@ namespace BarycentricCoordinates
             bool onEdge = (0 <= lambda1) && (lambda1 <= 1)
                 && (0 <= lambda2) && (lambda2 <= 1)
                 && (0 <= lambda3) && (lambda3 <= 1)
-                && (TestEquals(lambda1, 0) + TestEquals(lambda2, 0) + TestEquals(lambda3, 0) == 1);
+                && (TestEquals(lambda1, 0) + TestEquals(lambda2, 0) + TestEquals(lambda3, 0) <= 2);
 
             return inside || onEdge;
         }
 
         private int TestEquals(double a, double b)
         {
-            return Math.Abs(a - b) < 0.00001 ? 1 : 0;
+            return Math.Abs(a - b) <= double.Epsilon ? 1 : 0;
         }
 
         private void PaintShape(List<Point> points, Pen pen)
