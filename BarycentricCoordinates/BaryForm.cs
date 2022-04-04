@@ -85,7 +85,7 @@ namespace BarycentricCoordinates
 
         private int TestEquals(double a, double b)
         {
-            return Math.Abs(a - b) <= double.Epsilon ? 1 : 0;
+            return Math.Abs(a - b) <= 0.00001 ? 1 : 0;
         }
 
         private void PaintShape(List<Point> points, Pen pen)

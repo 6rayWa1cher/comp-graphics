@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarycentricCoordinates", "B
 		{1F0AB905-8B84-4686-BE75-18EEF9010369} = {1F0AB905-8B84-4686-BE75-18EEF9010369}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurve", "BezierCurve\BezierCurve.csproj", "{94726A7D-4B14-4489-B337-DD3BEADEF76D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeDimentionalDemo", "ThreeDimentionalDemo\ThreeDimentionalDemo.csproj", "{94363C48-3432-4C32-93D7-60B90D4A871B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +28,14 @@ Global
 		{46AA39A9-F62A-4EAD-ACA8-C562D6377DEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46AA39A9-F62A-4EAD-ACA8-C562D6377DEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46AA39A9-F62A-4EAD-ACA8-C562D6377DEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94726A7D-4B14-4489-B337-DD3BEADEF76D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94726A7D-4B14-4489-B337-DD3BEADEF76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94726A7D-4B14-4489-B337-DD3BEADEF76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94726A7D-4B14-4489-B337-DD3BEADEF76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94363C48-3432-4C32-93D7-60B90D4A871B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94363C48-3432-4C32-93D7-60B90D4A871B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94363C48-3432-4C32-93D7-60B90D4A871B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94363C48-3432-4C32-93D7-60B90D4A871B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
