@@ -42,37 +42,37 @@ namespace ThreeDimentionalDemo
                 Shape3D = new Shape3D(new List<Polygon3D>
                 {
                     new Polygon3D(new Point3Dd[] { new Point3Dd(0, 0, 0), new Point3Dd(1, 0, 0) }),
-                }),
+                }, new Point3Dd()),
                 WirePen = new Pen(Color.Red),
                 Sx = 4,
                 Sy = 4,
                 Sz = 4,
             };
-            _objs.Add(axisX);
+            //_objs.Add(axisX);
             var axisY = new SceneObject
             {
                 Shape3D = new Shape3D(new List<Polygon3D>
                 {
                     new Polygon3D(new Point3Dd[] { new Point3Dd(0, 0, 0), new Point3Dd(0, 1, 0) }),
-                }),
+                }, new Point3Dd()),
                 WirePen = new Pen(Color.Green),
                 Sx = 4,
                 Sy = 4,
                 Sz = 4,
             };
-            _objs.Add(axisY);
+            //_objs.Add(axisY);
             var axisZ = new SceneObject
             {
                 Shape3D = new Shape3D(new List<Polygon3D>
                 {
                     new Polygon3D(new Point3Dd[] { new Point3Dd(0, 0, 0), new Point3Dd(0, 0, 1) }),
-                }),
+                }, new Point3Dd()),
                 WirePen = new Pen(Color.Aqua),
                 Sx = 4,
                 Sy = 4,
                 Sz = 4,
             };
-            _objs.Add(axisZ);
+            //_objs.Add(axisZ);
 
             var cube = new SceneObject
             {
@@ -84,7 +84,7 @@ namespace ThreeDimentionalDemo
                     new Polygon3D(new Point3Dd[] { new Point3Dd(1, 0, 0), new Point3Dd(1, 1, 0), new Point3Dd(1, 1, 1), new Point3Dd(1, 0, 1) }),
                     new Polygon3D(new Point3Dd[] { new Point3Dd(0, 1, 0), new Point3Dd(1, 1, 0), new Point3Dd(1, 1, 1), new Point3Dd(0, 1, 1) }),
                     new Polygon3D(new Point3Dd[] { new Point3Dd(0, 0, 1), new Point3Dd(1, 0, 1), new Point3Dd(1, 1, 1), new Point3Dd(0, 1, 1) }),
-                }),
+                }, new Point3Dd(0.5, 0.5, 0.5)),
                 WirePen = new Pen(Color.Blue),
                 Position = new ScenePosition(new Point3Dd(-1, -1, -1), 0, 0, 0),
                 Sx = 2,
@@ -111,12 +111,16 @@ namespace ThreeDimentionalDemo
 
         private void RenderTimer_Tick(object sender, EventArgs e)
         {
+            _objs[0].Position.Rx += Utils.ConvertDegreesToRadians((float)XSpeedUpDown.Value);
+            _objs[0].Position.Ry += Utils.ConvertDegreesToRadians((float)YSpeedUpDown.Value);
+            _objs[0].Position.Rz += Utils.ConvertDegreesToRadians((float)ZSpeedUpDown.Value);
             FullRenderScene();
         }
 
         private void ThreeeDimentionalForm_Load(object sender, EventArgs e)
         {
             InitializeStage();
+            RenderTimer.Enabled = true;
         }
 
         private void ThreeeDimentionalForm_Paint(object sender, PaintEventArgs e)
@@ -126,55 +130,60 @@ namespace ThreeDimentionalDemo
 
         private void RenderFrame(Image image)
         {
-            Graphics gr = Graphics.FromImage(image);
-            gr.Clear(Color.White);
-            ScenePosition c = _camera;
-            var rp = new RenderProps
+            using (Graphics gr = Graphics.FromImage(image))
             {
-                Dx = c.Coords.X,
-                Dy = c.Coords.Y,
-                Dz = c.Coords.Z,
-                Sx = 30,
-                Sy = 30,
-                Sz = 30,
-                Rx = c.Rx,
-                Ry = c.Ry,
-                Rz = c.Rz,
-            };
-            Matrix<double> cameraMatrix = rp.GetMatrix();
-            foreach (SceneObject obj in _objs)
-            {
-                Shape3D shape = obj.Shape3D;
-                Pen pen = obj.WirePen;
-                var rpObj = new RenderProps
+                gr.Clear(Color.White);
+                ScenePosition c = _camera;
+                var rp = new RenderProps
                 {
-                    Dx = obj.Position.Coords.X,
-                    Dy = obj.Position.Coords.Y,
-                    Dz = obj.Position.Coords.Z,
-                    Sx = obj.Sx,
-                    Sy = obj.Sy,
-                    Sz = obj.Sz,
-                    Rx = obj.Position.Rx,
-                    Ry = obj.Position.Ry,
-                    Rz = obj.Position.Rz,
+                    Dx = c.Coords.X,
+                    Dy = c.Coords.Y,
+                    Dz = c.Coords.Z,
+                    Sx = 30,
+                    Sy = 30,
+                    Sz = 30,
+                    Rx = c.Rx,
+                    Ry = c.Ry,
+                    Rz = c.Rz,
                 };
-                Matrix<double> objMatrix = rpObj.GetMatrix();
-                Matrix<double> transformMatrix = objMatrix.Multiply(cameraMatrix);
-                Console.WriteLine(cameraMatrix.ToString());
-                foreach (Polygon3D polygon in shape.Polygon3Ds)
+                Matrix<double> cameraMatrix = rp.GetMatrix();
+                foreach (SceneObject obj in _objs)
                 {
-                    int pointsCount = polygon.Points.Length;
-                    PointF[] points = new PointF[pointsCount + 1];
-                    for (int i = 0; i < pointsCount; i++)
+                    Shape3D shape = obj.Shape3D;
+                    Pen pen = obj.WirePen;
+                    var rpObj = new RenderProps
                     {
-                        Point3Dd p = polygon.Points[i];
-                        Vector<double> v = Vector<double>.Build.DenseOfArray(new double[] { p.X, p.Y, p.Z, 1 });
-                        v = transformMatrix.LeftMultiply(v);
-                        points[i] = new PointF((float)v[0], (float)v[1]);
-                        Console.WriteLine($"#{(float)v[0]}, #{(float)v[1]}");
+                        Dx = obj.Position.Coords.X + c.Coords.X,
+                        Dy = obj.Position.Coords.Y + c.Coords.Y,
+                        Dz = obj.Position.Coords.Z + c.Coords.Z,
+                        Sx = obj.Sx * 30,
+                        Sy = obj.Sy * 30,
+                        Sz = obj.Sz * 30,
+                        Rx = obj.Position.Rx + c.Rx,
+                        Ry = obj.Position.Ry + c.Ry,
+                        Rz = obj.Position.Rz + c.Rz,
+                        Px = -obj.Shape3D.Center.X,
+                        Py = -obj.Shape3D.Center.Y,
+                        Pz = -obj.Shape3D.Center.Z,
+                    };
+                    Matrix<double> objMatrix = rpObj.GetMatrix();
+                    Matrix<double> transformMatrix = objMatrix;
+                    Console.WriteLine(cameraMatrix.ToString());
+                    foreach (Polygon3D polygon in shape.Polygon3Ds)
+                    {
+                        int pointsCount = polygon.Points.Length;
+                        PointF[] points = new PointF[pointsCount + 1];
+                        for (int i = 0; i < pointsCount; i++)
+                        {
+                            Point3Dd p = polygon.Points[i];
+                            Vector<double> v = Vector<double>.Build.DenseOfArray(new double[] { p.X, p.Y, p.Z, 1 });
+                            v = transformMatrix.LeftMultiply(v);
+                            points[i] = new PointF((float)v[0], (float)v[1]);
+                            Console.WriteLine($"#{(float)v[0]}, #{(float)v[1]}");
+                        }
+                        points[pointsCount] = points[0];
+                        gr.DrawLines(pen, points);
                     }
-                    points[pointsCount] = points[0];
-                    gr.DrawLines(pen, points);
                 }
             }
         }
@@ -255,6 +264,12 @@ namespace ThreeDimentionalDemo
         // http://compgraph.tpu.ru/3d.htm
         public Matrix<double> GetMatrix()
         {
+            var pMatrix = Matrix<double>.Build.DenseOfArray(new double[,] {
+                { 1,                0,              0,              0 },
+                { 0,                1,              0,              0 },
+                { 0,                0,              1,              0 },
+                { Px,               Py,             Pz,             1 }
+            });
             var rxMatrix = Matrix<double>.Build.DenseOfArray(new double[,] {
                 { 1,                0,              0,              0  },
                 { 0,                Math.Cos(Rx),   Math.Sin(Rx),   0  },
@@ -279,13 +294,13 @@ namespace ThreeDimentionalDemo
                 { 0,                0,              Sz,             0 },
                 { 0,                0,              0,              1 }
             });
-            var dpMatrix = Matrix<double>.Build.DenseOfArray(new double[,] {
-                { 0,                0,              0,              Px },
-                { 0,                0,              0,              Py },
-                { 0,                0,              0,              Pz },
-                { Dx,               Dy,             Dz,             0  }
+            var dMatrix = Matrix<double>.Build.DenseOfArray(new double[,] {
+                { 1,                0,              0,              0 },
+                { 0,                1,              0,              0 },
+                { 0,                0,              1,              0 },
+                { Dx,               Dy,             Dz,             1  }
             });
-            return rxMatrix.Multiply(ryMatrix).Multiply(rzMatrix).Multiply(sMatrix).Add(dpMatrix);
+            return pMatrix.Multiply(sMatrix).Multiply(rxMatrix).Multiply(ryMatrix).Multiply(rzMatrix).Multiply(dMatrix);
         }
     }
     public class Point3Dd
@@ -322,10 +337,12 @@ namespace ThreeDimentionalDemo
     public class Shape3D
     {
         public IList<Polygon3D> Polygon3Ds { get; set; }
+        public Point3Dd Center { get; set; }
 
-        public Shape3D(IList<Polygon3D> polygon3Ds)
+        public Shape3D(IList<Polygon3D> polygon3Ds, Point3Dd center)
         {
             Polygon3Ds = polygon3Ds;
+            Center = center;
         }
     }
 
@@ -354,7 +371,7 @@ namespace ThreeDimentionalDemo
 
     public class SceneObject
     {
-        public Shape3D Shape3D { get; set; } = new Shape3D(new List<Polygon3D>());
+        public Shape3D Shape3D { get; set; } = new Shape3D(new List<Polygon3D>(), new Point3Dd());
 
         public Pen WirePen { get; set; } = new Pen(Color.Red);
 
